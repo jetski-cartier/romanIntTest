@@ -1,0 +1,63 @@
+import unittest
+
+def roman_to_int(roman):
+    roman_numerals = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
+    total = 0
+    prev_value = 0
+
+    for numeral in reversed(roman):
+        value = roman_numerals.get(numeral, 0)
+
+        if value < prev_value:
+            total -= value
+        else:
+            total += value
+
+        prev_value = value
+
+    return total
+
+class TestRomanToIntegerConversion(unittest.TestCase):
+
+    def test_single_numerals(self):
+        self.assertEqual(roman_to_int('I'), 1, "Conversion of 'I' failed")
+        self.assertEqual(roman_to_int('V'), 5, "Conversion of 'V' failed")
+        self.assertEqual(roman_to_int('X'), 10, "Conversion of 'X' failed")
+        self.assertEqual(roman_to_int('L'), 50, "Conversion of 'L' failed")
+        self.assertEqual(roman_to_int('C'), 100, "Conversion of 'C' failed")
+        self.assertEqual(roman_to_int('D'), 500, "Conversion of 'D' failed")
+        self.assertEqual(roman_to_int('M'), 1000, "Conversion of 'M' failed")
+
+    def test_many_letters(self):
+        self.assertEqual(roman_to_int('XI'), 11, "Conversion of 'XI' failed")
+
+    def test_subtractive_notation(self):
+        self.assertEqual(roman_to_int('IV'), 4, "Conversion of 'IV' failed")
+
+    def test_with_and_without_subtractive_notation(self):
+        self.assertEqual(roman_to_int('XIV'), 14, "Conversion of 'XIV' failed")
+        self.assertEqual(roman_to_int('XV'), 15, "Conversion of 'XV' failed")
+
+    def test_repetition(self):
+        self.assertEqual(roman_to_int('II'), 2, "Conversion of 'II' failed")
+
+    def test_first_number(self):
+        self.assertEqual(roman_to_int('I'), 1, "Conversion of 'I' failed")
+
+    def test_invalid_letter(self):
+        with self.assertRaises(KeyError):
+            roman_to_int('Z')
+
+    def test_invalid_and_valid_letter(self):
+        with self.assertRaises(KeyError):
+            roman_to_int('XIZ')
+
+    def test_not_valid(self):
+        with self.assertRaises(ValueError):
+            roman_to_int('VV')
+
+    def test_null(self):
+        self.assertEqual(roman_to_int(''), 0, "Conversion of an empty string failed")
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)
